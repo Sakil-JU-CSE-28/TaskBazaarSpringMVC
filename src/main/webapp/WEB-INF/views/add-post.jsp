@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%--
   Created by IntelliJ IDEA.
   User: sakil
@@ -13,32 +14,25 @@
 </head>
 <body>
 <h1>Add New Post</h1>
-<form action="save" method="post">
+<form:form action="${pageContext.request.contextPath}/posts/save" method="post" modelAttribute="post">
     <label>Title:</label><br>
-    <c:if test="${not empty errors}">
-        <c:if test="${not empty errors['Title']}">
-            <span style="color: red">${errors['Title']}</span><br>
-        </c:if>
-        <c:if test="${not empty errors['Title_len']}">
-            <span style="color: red">${errors['Title_len']}</span><br>
-        </c:if>
-    </c:if>
-    <input type="text" name="title" required><br><br>
+    <form:input path="title" />
+    <form:errors path="title" cssClass="error" /><br><br>
 
     <label>Content:</label><br>
-    <c:if test="${not empty errors}">
-        <c:if test="${not empty errors['Content']}">
-            <span style="color: red">${errors['Content']}</span><br>
-        </c:if>
-        <c:if test="${not empty errors['Content_len']}">
-            <span style="color: red">${errors['Content_len']}</span><br>
-        </c:if>
-    </c:if>
-    <textarea name="content" rows="5" cols="50" required></textarea><br><br>
+    <form:textarea path="content" rows="5" cols="50" />
+    <form:errors path="content" cssClass="error" /><br><br>
 
     <input type="submit" value="Save">
-</form>
+</form:form>
 <a href="${pageContext.request.contextPath}/posts">Back to List</a>
+
+<style>
+    .error {
+        color: red;
+    }
+</style>
 </body>
 </html>
+
 

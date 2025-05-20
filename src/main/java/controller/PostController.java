@@ -9,12 +9,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import service.PostService;
-import validation.PostValidator;
 
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,8 +53,14 @@ public class PostController {
 
     @PostMapping("/save")
     @PreAuthorize("hasRole('BUYER')")
-    public String save(@ModelAttribute PostDto post, Model model) throws DbException {
-        PostValidator.validate(post);
+    public String save(@Valid @ModelAttribute("post") PostDto post, BindingResult bindingResult, Model model) throws DbException {
+
+        if (bindingResult.hasErrors()) {
+            log.info("Validation errors on create post: {}", bindingResult.getAllErrors());
+            model.addAttribute("post", post);
+            return "add-post";
+        }
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         post.setAuthor(authentication.getName());
         postService.save(post);
@@ -72,8 +79,12 @@ public class PostController {
 
     @PostMapping("/update")
     @PreAuthorize("hasRole('BUYER')")
-    public String update(@ModelAttribute PostDto post, Model model) throws Exception {
-        PostValidator.validate(post);
+    public String update(@Valid @ModelAttribute PostDto post, BindingResult bindingResult, Model model) throws Exception {
+        if (bindingResult.hasErrors()) {
+            log.info("Validation errors in update post: {}", bindingResult.getAllErrors());
+            model.addAttribute("post", post);
+            return "edit-post";
+        }
         postService.update(post);
         log.info("Updated post : {}", post);
         return "redirect:/posts";

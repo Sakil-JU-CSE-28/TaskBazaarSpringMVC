@@ -37,7 +37,7 @@
                         Accepted
                     </c:when>
                     <c:otherwise>
-                        <form action="<c:url value='/bids/${bid.id}/${bid.postId}/accept'/>" method="post">
+                        <form action="<c:url value='/bids/accept/${bid.id}/${bid.postId}'/>" method="post">
                             <button type="submit">Accept</button>
                         </form>
                     </c:otherwise>
@@ -49,7 +49,7 @@
 </table>
 
 <c:if test="${empty bids}">
-    <p>No bids found.</p>
+    <p>No bids were found.</p>
 </c:if>
 </body>
 </html>

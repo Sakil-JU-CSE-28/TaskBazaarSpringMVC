@@ -46,7 +46,7 @@ public class BidController {
         return "list-bids";
     }
 
-    @PostMapping("/{bidId}/{postId}/accept")
+    @PostMapping("/accept/{bidId}/{postId}")
     public String accept(@PathVariable Long bidId, @PathVariable Long postId) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(!postService.isOwner(postId, authentication.getName())) throw new RuntimeException(Constants.Error.UNAUTHORIZED);
